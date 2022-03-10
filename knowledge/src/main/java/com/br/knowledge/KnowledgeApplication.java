@@ -18,5 +18,10 @@ public class KnowledgeApplication {
 	public String testando() {
 		return "Teste Ok";
 	}
+	
+	@GetMapping("/primeiro/commit")
+	public String primeiroCommit() {
+		return "Primeiro Commit";
+	}
 
 }
