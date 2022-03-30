@@ -23,6 +23,10 @@ public class WorkedTime {
 
 	
 	
+	public WorkedTime() {
+		super();
+	}
+
 	public WorkedTime(Integer id, LocalDate day, LocalTime arrivalTime, LocalTime departureTime) {
 		super();
 		this.id = id;

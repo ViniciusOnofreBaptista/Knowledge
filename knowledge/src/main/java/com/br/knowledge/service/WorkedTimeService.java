@@ -1,10 +1,11 @@
 package com.br.knowledge.service;
 
-import java.time.Period;
+import java.time.DayOfWeek;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.br.knowledge.exception.BadArgumentsException;
 import com.br.knowledge.model.WorkedTime;
 import com.br.knowledge.repository.WorkedTimeRepository;
 
@@ -26,23 +27,24 @@ public class WorkedTimeService {
 	}
 
 
-	private void validIfArrivalTimeIsGreaterThanDepartureTime(WorkedTime workedTime) {
+	public void validIfArrivalTimeIsGreaterThanDepartureTime(WorkedTime workedTime) {
 		if(workedTime.getArrivalTime().isAfter(workedTime.getDepartureTime())){
-			throw new RuntimeException("Erro ao salvar horas trabalhadas hora de chegada não pode ser maior que a hora de saida");
+			throw new BadArgumentsException("Erro ao salvar horas trabalhadas hora de chegada não pode ser maior que a hora de saida");
 		}
 	}
 
-	private void validLunchTime(WorkedTime workedTime) {
+	public void validLunchTime(WorkedTime workedTime) {
 	 if(workedTime.getDepartureTime().getHour() - workedTime.getArrivalTime().getHour() < 9) {
-		throw new RuntimeException("Erro ao salvar horas trabalhadas hora de almoço precisa ser maior que uma hora");
+		 throw new BadArgumentsException("Erro ao salvar horas trabalhadas hora de almoço precisa ser maior que uma hora");
 	}
 	}
 	
-	private void validWeekendTime(WorkedTime workedTime) {
-		if(workedTime.getDay().getDayOfWeek().getValue() == 7 || workedTime.getDay().getDayOfWeek().getValue() == 6) {
-			throw new RuntimeException("Erro ao salvar horas trabalhadas finais de semana não permitido");
+	public void validWeekendTime(WorkedTime workedTime) {
+		if(workedTime.getDay().getDayOfWeek().getValue() == DayOfWeek.SUNDAY.getValue() || workedTime.getDay().getDayOfWeek().getValue() == DayOfWeek.SATURDAY.getValue()) {
+			throw new BadArgumentsException("Erro ao salvar horas trabalhadas finais de semana não permitido");
 		}
 	}
+	
 }
 
  
