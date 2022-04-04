@@ -1,6 +1,6 @@
 package com.br.knowledge.controller;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,4 +28,15 @@ public class WorkedTimeController {
 		return new ResponseEntity<>(savedWorkedTime, HttpStatus.CREATED);
 	}
 	
+	
+	@GetMapping
+	public ResponseEntity<?> getAllRegisters(){
+		return new ResponseEntity<>(workedTimeService.getAllRegister(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/workedTimeByDayAndId")
+	public ResponseEntity<?> addFoo(@RequestParam(name = "id") Integer id, @RequestParam LocalDate dayWorked) { 
+	    WorkedTime findWorkedTimeByDayAndId = workedTimeService.findWorkedTimeByDayAndIdWorker(id, dayWorked);
+		return new ResponseEntity<>(findWorkedTimeByDayAndId, HttpStatus.OK);
+	}
 }
