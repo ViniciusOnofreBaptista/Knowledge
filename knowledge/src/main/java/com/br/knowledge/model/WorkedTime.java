@@ -3,10 +3,13 @@ package com.br.knowledge.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -24,7 +27,9 @@ public class WorkedTime {
 	
 	private LocalTime departureTime;
 
-	
+	@OneToOne()
+	@JoinColumn(name = "worker_id", referencedColumnName = "id")
+	private Worker worker;
 	
 	public WorkedTime() {
 		super();
@@ -68,6 +73,14 @@ public class WorkedTime {
 
 	public void setDepartureTime(LocalTime departureTime) {
 		this.departureTime = departureTime;
+	}
+
+	public Worker getWorker() {
+		return worker;
+	}
+
+	public void setWorker(Worker worker) {
+		this.worker = worker;
 	}
 	
 	
