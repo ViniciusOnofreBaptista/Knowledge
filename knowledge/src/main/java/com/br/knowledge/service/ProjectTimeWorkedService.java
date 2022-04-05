@@ -33,11 +33,6 @@ public class ProjectTimeWorkedService {
 		}
 	}
 
-	private Integer getWorkedTime(WorkedTime workedTimeDb) {
-		Integer timeWorked = workedTimeDb.getDepartureTime().getHour() - workedTimeDb.getArrivalTime().getHour();
-		return timeWorked;
-	}
-
 	private Integer validIfExistsSomeWorkedProjectTime(Integer workedId, LocalDate workedDay, Integer timeSpent) {
 		List<ProjectTimeWorked> projectsTimeWorked = projectTimeWorkedRepository.findByWorkedDayAndWorkerId(workedDay, workedId);
 		for (ProjectTimeWorked projects : projectsTimeWorked) {
@@ -45,4 +40,11 @@ public class ProjectTimeWorkedService {
 		}
 		return timeSpent;
 	}
+	
+	private Integer getWorkedTime(WorkedTime workedTimeDb) {
+		Integer timeWorked = workedTimeDb.getDepartureTime().getHour() - workedTimeDb.getArrivalTime().getHour();
+		return timeWorked;
+	}
+
+
 }
