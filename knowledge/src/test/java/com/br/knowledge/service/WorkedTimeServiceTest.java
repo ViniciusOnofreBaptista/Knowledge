@@ -33,7 +33,7 @@ public class WorkedTimeServiceTest {
 
 	@Test
 	void postWorkedTime() throws Exception {
-		WorkedTime workedTime = new WorkedTime(1, LocalDate.of(2022, 3, 30), LocalTime.of(8, 30), LocalTime.of(17, 30));
+		WorkedTime workedTime = new WorkedTime(1, LocalDate.of(2022, 04, 05), LocalTime.of(8, 30), LocalTime.of(17, 30));
 		mockMvc.perform(post("/workedTime")
 		        .contentType("application/json")
 		        .content(mapper.writeValueAsString(workedTime)))

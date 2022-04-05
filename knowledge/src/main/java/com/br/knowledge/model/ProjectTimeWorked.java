@@ -31,6 +31,18 @@ public class ProjectTimeWorked {
 	public ProjectTimeWorked() {
 		super();
 	}
+	
+	
+
+	public ProjectTimeWorked(String projectName, Integer timeSpent, LocalDate workedDay, Worker worker) {
+		super();
+		this.projectName = projectName;
+		this.timeSpent = timeSpent;
+		this.workedDay = workedDay;
+		this.worker = worker;
+	}
+
+
 
 	public Integer getId() {
 		return id;
