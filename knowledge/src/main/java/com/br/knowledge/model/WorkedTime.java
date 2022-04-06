@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.br.knowledge.repository.Periodo;
 
 @Entity
 @Table(name = "worked_time")
@@ -20,28 +21,35 @@ public class WorkedTime {
 	@Id()
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private LocalDate day;
-	
+
 	private LocalTime arrivalTime;
-	
+
 	private LocalTime departureTime;
+
+	private Periodo period;
 
 	@OneToOne()
 	@JoinColumn(name = "worker_id", referencedColumnName = "id")
 	private Worker worker;
-	
+
 	public WorkedTime() {
 		super();
 	}
 
-	public WorkedTime(Integer id, LocalDate day, LocalTime arrivalTime, LocalTime departureTime) {
+
+	public WorkedTime(Integer id, LocalDate day, LocalTime arrivalTime, LocalTime departureTime, Periodo period,
+			Worker worker) {
 		super();
 		this.id = id;
 		this.day = day;
 		this.arrivalTime = arrivalTime;
 		this.departureTime = departureTime;
+		this.period = period;
+		this.worker = worker;
 	}
+
 
 	public Integer getId() {
 		return id;
@@ -82,6 +90,12 @@ public class WorkedTime {
 	public void setWorker(Worker worker) {
 		this.worker = worker;
 	}
-	
-	
+
+	public Periodo getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Periodo period) {
+		this.period = period;
+	}
 }

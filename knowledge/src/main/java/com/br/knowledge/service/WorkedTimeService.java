@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.br.knowledge.exception.BadArgumentsException;
 import com.br.knowledge.model.WorkedTime;
+import com.br.knowledge.repository.Periodo;
 import com.br.knowledge.repository.WorkedTimeRepository;
 
 @Service
@@ -56,6 +57,30 @@ public class WorkedTimeService {
 		Optional<WorkedTime> workedTimeDb = workedTimeRepo.findByWorkerIdAndDay(id, dayWorked);
 		return workedTimeDb.get();
 	}
+
+	public WorkedTime updateWorkedTime(WorkedTime workedTime) {
+		WorkedTime workedTimeUpdated = findWorkedTimeAndUpdatePeriod(workedTime);
+		validIfArrivalTimeIsGreaterThanDepartureTime(workedTimeUpdated);
+		validLunchTime(workedTimeUpdated);
+		return null; 
+	}
+
+	private WorkedTime findWorkedTimeAndUpdatePeriod(WorkedTime workedTime) {
+		WorkedTime workedTimeDB = findWorkedTimeByDayAndIdWorker(workedTime.getId(), workedTime.getDay());
+		if (workedTime.getPeriod().equals(Periodo.MANHA)) {
+			if(workedTimeDB.getArrivalTime().isAfter(workedTime.getArrivalTime())) {
+				throw new BadArgumentsException("A hora inserida deve ser maior que a hora antiga");
+			}
+			workedTimeDB.setArrivalTime(workedTime.getArrivalTime());
+		} else {
+			if(workedTimeDB.getDepartureTime().isAfter(workedTime.getDepartureTime())) {
+				throw new BadArgumentsException("A hora de saida inserida deve ser maior que a hora de saida antiga");
+			}
+			workedTimeDB.setDepartureTime(workedTime.getDepartureTime());
+		}
+		return workedTimeDB;
+	}
+
 	
 }
 
