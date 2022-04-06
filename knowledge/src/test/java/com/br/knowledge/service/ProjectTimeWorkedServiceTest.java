@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.br.knowledge.model.ProjectTimeWorked;
 import com.br.knowledge.model.WorkedTime;
 import com.br.knowledge.model.Worker;
+import com.br.knowledge.repository.Periodo;
 import com.br.knowledge.repository.ProjectTimeWorkedRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,8 +46,8 @@ public class ProjectTimeWorkedServiceTest {
 	
 	@Test
 	void postProjectWorkedTime() throws Exception {
-		ProjectTimeWorked projectTimeWorked = new ProjectTimeWorked("fabrica de memes", 5, LocalDate.now(), new Worker(1, "Vinicius"));
-		WorkedTime workedTime = new WorkedTime(1, LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(8));
+		ProjectTimeWorked projectTimeWorked = new ProjectTimeWorked("fabrica de memes", 5, LocalDate.now(), new Worker(1, "Batman"));
+		WorkedTime workedTime = new WorkedTime(1, LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(9), Periodo.MANHA, new Worker(1, "Batman"));
 		Mockito.when(serviceWorkedTime.findWorkedTimeByDayAndIdWorker(projectTimeWorked.getWorker().getId(), projectTimeWorked.getWorkedDay())).thenReturn(workedTime);
 		mockMvc.perform(post("/project")
 		        .contentType("application/json")
@@ -59,7 +60,7 @@ public class ProjectTimeWorkedServiceTest {
 	void saveProjectTimeWorkerCantBeGreaterThanTimeWorked() throws Exception {
 		List<ProjectTimeWorked> list= new ArrayList<ProjectTimeWorked>();
 		Mockito.when(projectTimeWorkedRepository.findByWorkedDayAndWorkerId(LocalDate.now(), 1)).thenReturn(list);
-		WorkedTime workedTime = new WorkedTime(1, LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(8));
+		WorkedTime workedTime = new WorkedTime(1, LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(8), Periodo.MANHA, new Worker(1, "Batman"));
 		ProjectTimeWorked projectTimeWorked = new ProjectTimeWorked("Fabricas de meme", 10, LocalDate.now(), new Worker(1, "Vinicius"));
 		
 		RuntimeException exception = assertThrows(RuntimeException.class,
