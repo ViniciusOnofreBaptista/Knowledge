@@ -2,12 +2,14 @@ package com.br.knowledge.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.br.knowledge.model.ControlWorkedTime;
 import com.br.knowledge.model.WorkedTime;
 import com.br.knowledge.model.Worker;
 import com.br.knowledge.repository.Periodo;
@@ -115,6 +118,21 @@ public class WorkedTimeServiceTest {
 		mockMvc.perform(
 				put("/workedTime").contentType("application/json").content(mapper.writeValueAsString(workedTime)))
 				.andExpect(status().isAccepted());
+	}
+
+	@Test
+	void calculateEstimateHoursWorked() {
+		Mockito.when(workedTimeRepo.findAllByWorkerIdAndDayGreaterThanEqualAndDayLessThanEqual(1, LocalDate.now(),
+				LocalDate.now().plusDays(30)))
+				.thenReturn(List.of(
+						new WorkedTime(1, LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(9), Periodo.MANHA,
+								new Worker(1, "Vinicius")),
+						new WorkedTime(1, LocalDate.now().plusDays(1), LocalTime.now(), LocalTime.now().plusHours(9), Periodo.MANHA,
+								new Worker(1, "Vinicius"))));
+		
+		ControlWorkedTime calculateWorkedTime = workedTimeService.calculateWorkedTime(LocalDate.now(), 1);
+		
+		assertThat(calculateWorkedTime.getWorkedTimeRemaining() == 152);
 	}
 
 }
