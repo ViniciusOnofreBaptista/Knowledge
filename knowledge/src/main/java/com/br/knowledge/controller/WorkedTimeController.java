@@ -3,6 +3,7 @@ package com.br.knowledge.controller;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.knowledge.model.ControlWorkedTime;
 import com.br.knowledge.model.WorkedTime;
 import com.br.knowledge.service.WorkedTimeService;
 
@@ -45,5 +47,11 @@ public class WorkedTimeController {
 	public ResponseEntity<?> updateWorkedTime(@RequestBody WorkedTime workedTime){
 		WorkedTime updateWorkedTime = workedTimeService.updateWorkedTime(workedTime);
 		return new ResponseEntity<>(updateWorkedTime, HttpStatus.ACCEPTED);
+	}
+	
+	@GetMapping("/calculate/workedTime")
+	public  ResponseEntity<?> calculateWorkedTime(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam Integer idWorkder){
+		ControlWorkedTime calculatedWorkedTime = workedTimeService.calculateWorkedTime(date, idWorkder);
+		return new ResponseEntity<>(calculatedWorkedTime, HttpStatus.OK);
 	}
 }
